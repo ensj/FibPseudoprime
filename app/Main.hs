@@ -2,19 +2,18 @@ module Main where
 
 import Lib
 import Sort
-import Data.List
+import Data.List (filter, product)
 import Math.NumberTheory.Factor
 -- import Math.NumberTheory.Primes.Testing
 
-main :: IO ()
+main :: IO Integer
 main = do
-    print("Input a fib factor to calculate From. (Calculates n to n + 500)")
+    print("Input a fib factor to calculate From. (Calculates n to n + 5)")
     input <- getLine
     let n = (read input :: Int)
 
     let fibFunc = fibFactorsCleaned n
-    fibFunc(n + 500)
-    print ""
+    fibFunc(n + 10)
 
 fibFactorsCleaned :: Int -> Int -> IO Integer
 fibFactorsCleaned n limit = do
@@ -24,21 +23,24 @@ fibFactorsCleaned n limit = do
         let fibn = fib n
         print(fibn)
 
-        --print("factors (+-1 mod n):")
         let pf = pfactors(fibn)
         let m = toInteger(n)
         let pfFiltered = filter (\factor -> (factor `mod` m == 1) || (factor `mod` m == m - 1)) pf
-        --print(pfFiltered)
 
-        --print("Subsets:")
-        let subs = subsets(pfFiltered)
-        --print(subs)
+        let cl = cleanList(pfFiltered)
+
+        print("Subsets:")
+        let subs = (map product (subsets(fst cl)), splitByLength(subsets(snd cl)))
+        print(subs)
+
+        print("Singleton Fibpsp")
+        print(cartesianProduct(fst subs, fst (snd subs)))
 
         --print("SplitByLength:")
-        let spbl = splitByLength(subs)
+        --let spbl = splitByLength(subs)
         --print(spbl)
 
-        print("CartesianProduct")
-        print(cartesianProduct(spbl))
+        --print("CartesianProduct")
+        --print(cartesianProduct(spbl))
         fibFactorsCleaned (n+1) limit
     else return (-1)
