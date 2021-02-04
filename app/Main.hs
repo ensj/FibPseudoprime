@@ -30,11 +30,18 @@ fibFactorsCleaned n limit = do
         let cl = cleanList(pfFiltered)
 
         print("Subsets:")
+        -- ((map product) your +/- 1 mod 5 subsets, (singleton factors, and odd products) )
         let subs = (map product (subsets(fst cl)), splitByLength(subsets(snd cl)))
         print(subs)
 
         print("Singleton Fibpsp")
         print(cartesianProduct(fst subs, fst (snd subs)))
+
+        print("Odd Fibpsp")
+        print(snd (snd subs))
+
+        print("Odd2 Fibpsp")
+        print(cartesianProduct(fst (snd subs), snd (snd subs)))
 
         --print("SplitByLength:")
         --let spbl = splitByLength(subs)
