@@ -1,7 +1,8 @@
 module Sort
     ( cleanList,
       splitByLength,
-      subsets
+      subsets,
+      cartesianProduct
     ) where
 
 import Data.List ( filter, product )
