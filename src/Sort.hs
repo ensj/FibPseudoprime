@@ -8,10 +8,11 @@ import Data.List ( filter, product )
 import Prelude
 
 --Cleans list--
-cleanList :: [Integer] -> ([Integer], [Integer])
-cleanList n = (a, b) where
-    a = filter (\n -> (n `mod` 5 == 2) || (n `mod` 5 == 3)) n
-    b = filter (\n -> (n `mod` 5 == 1) || (n `mod` 5 == 4)) n
+cleanList :: ([Integer], Integer) -> ([Integer], [Integer])
+cleanList (ns, l) = (a, b) where
+    n2 = filter (\n -> (n `mod` l == 1) || (n `mod` l == l - 1)) ns
+    a = filter (\n -> (n `mod` 5 == 2) || (n `mod` 5 == 3)) n2
+    b = filter (\n -> (n `mod` 5 == 1) || (n `mod` 5 == 4)) n2
 
 
 --Calculates all possible subsets--
