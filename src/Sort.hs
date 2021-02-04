@@ -9,8 +9,8 @@ import Prelude
 
 cleanList :: [Integer] -> ([Integer], [Integer])
 cleanList n = (a, b) where
-    a = filter (\n -> n `mod` 5 == 2) n
-    b = filter (\n -> n `mod` 5 == 3) n
+    a = filter (\n -> (n `mod` 5 == 2) || (n `mod` 5 == 3)) n
+    b = filter (\n -> (n `mod` 5 == 1) || (n `mod` 5 == 4)) n
 
 listProducts :: ([Integer], [Integer]) -> [Integer]
 listProducts (n, b) = x where
