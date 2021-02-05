@@ -4,50 +4,54 @@ import Lib
 import Sort
 import Data.List (filter, product)
 import Math.NumberTheory.Factor
--- import Math.NumberTheory.Primes.Testing
+import Math.NumberTheory.Primes.Testing
 
 main :: IO Integer
 main = do
-    print("Input a fib factor to calculate From. (Calculates n to n + 5)")
+    print("Input a fib factor to calculate From. (Calculates n to n + 500)")
     input <- getLine
     let n = (read input :: Int)
 
     let fibFunc = fibFactorsCleaned n
-    fibFunc(n + 10)
+    fibFunc(n + 500)
 
 fibFactorsCleaned :: Int -> Int -> IO Integer
 fibFactorsCleaned n limit = do
     if n /= limit 
     then do
-        print(show n ++ "th fib number: ")
         let fibn = fib n
-        print(fibn)
 
-        let pf = pfactors(fibn)
-        let m = toInteger(n)
-        let pfFiltered = filter (\factor -> (factor `mod` m == 1) || (factor `mod` m == m - 1)) pf
+        let primeFactors = pfactors(fibn)
+        let ntoi = toInteger(n) -- n to Integer
+        let pfFiltered = filter (\factor -> (factor `mod` ntoi == 1) || (factor `mod` ntoi == ntoi - 1)) primeFactors
 
+        -- clean to ([+/- 1 mod 5], [+/- 2 mod 5])
         let cl = cleanList(pfFiltered)
 
-        print("Subsets:")
-        -- ((map product) your +/- 1 mod 5 subsets, (singleton factors, and odd products) )
-        let subs = (map product (subsets(fst cl)), splitByLength(subsets(snd cl)))
-        print(subs)
+        -- (map product) +/- 1 mod 5 subsets, (singleton factors, and odd products)
+        let oneModFive = filter (\prod -> prod /= 1) (map product (subsets(fst cl)))
+        let singletonOddProd = splitByLength(subsets(snd cl))
 
-        print("Singleton Fibpsp")
-        print(cartesianProduct(fst subs, fst (snd subs)))
+        let fibpsp = concat [cartesianProduct(oneModFive, fst singletonOddProd), 
+                             snd singletonOddProd, 
+                             cartesianProduct(fst singletonOddProd, snd singletonOddProd)
+                             ]
 
-        print("Odd Fibpsp")
-        print(snd (snd subs))
+        if length fibpsp == 0 
+        then do
+            print("No fibpseudoprimes! " ++ show n)
+            fibFactorsCleaned (n+1) limit
+        else do
+            print(show n ++ "th fib number: " ++ show fibn)
+            print "FibPsp:"
+            print fibpsp
 
-        print("Odd2 Fibpsp")
-        print(cartesianProduct(fst (snd subs), snd (snd subs)))
+            let baseTwoFibpsp = filter (\elem -> isFermatPP elem 2) fibpsp
 
-        --print("SplitByLength:")
-        --let spbl = splitByLength(subs)
-        --print(spbl)
-
-        --print("CartesianProduct")
-        --print(cartesianProduct(spbl))
-        fibFactorsCleaned (n+1) limit
+            if length baseTwoFibpsp /= 0
+            then do
+                print "Base two pseudoprime psp:"
+                print(baseTwoFibpsp)
+                return (-1)
+            else fibFactorsCleaned (n+1) limit
     else return (-1)
