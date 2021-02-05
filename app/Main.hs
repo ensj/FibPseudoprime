@@ -8,12 +8,17 @@ import Math.NumberTheory.Primes.Testing
 
 main :: IO Integer
 main = do
-    print("Input a fib factor to calculate From. (Calculates n to n + 500)")
+    print("Input starting fib index (n)")
     input <- getLine
     let n = (read input :: Int)
 
     let fibFunc = fibFactorsCleaned n
-    fibFunc(n + 500)
+
+    print("Input ending fib index (n + m)")
+    input <- getLine
+    let m = (read input :: Int)
+
+    fibFunc(n + m)
 
 fibFactorsCleaned :: Int -> Int -> IO Integer
 fibFactorsCleaned n limit = do
@@ -26,11 +31,18 @@ fibFactorsCleaned n limit = do
         let pfFiltered = filter (\factor -> (factor `mod` ntoi == 1) || (factor `mod` ntoi == ntoi - 1)) primeFactors
 
         -- clean to ([+/- 1 mod 5], [+/- 2 mod 5])
-        let cl = cleanList(pfFiltered)
+        let cl = cleanList pfFiltered
+        -- print("cleanList")
+        -- print(cl)
 
-        -- (map product) +/- 1 mod 5 subsets, (singleton factors, and odd products)
-        let oneModFive = filter (\prod -> prod /= 1) (map product (subsets(fst cl)))
-        let singletonOddProd = splitByLength(subsets(snd cl))
+        -- (map product) +/- 1 mod 5 subsets
+        let oneModFive = map product $ filter (\set -> set /= []) $ subsets $ fst cl
+        -- pair (singleton factors, and odd products)
+        let singletonOddProd = splitByLength $ filter (\set -> set /= []) $ subsets $ snd cl
+        -- print("oneModFive")
+        -- print(oneModFive)
+        -- print("singletonOddProd")
+        -- print(singletonOddProd)
 
         let fibpsp = concat [cartesianProduct(oneModFive, fst singletonOddProd), 
                              snd singletonOddProd, 
