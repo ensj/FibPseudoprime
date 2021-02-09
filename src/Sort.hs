@@ -2,7 +2,8 @@ module Sort
     ( cleanList,
       splitByLength,
       subsets,
-      cartesianProduct
+      cartesianProduct, 
+      removeDuplicates
     ) where
 
 import Data.List ( filter, product )
@@ -32,3 +33,7 @@ cartesianProduct :: ([Integer], [Integer]) -> [Integer]
 cartesianProduct (a, b) = x where
     x = map product (sequence [a, b])
 
+removeDuplicates :: [Integer] -> [Integer]
+removeDuplicates [] = []
+removeDuplicates (x:xs)   | x `elem` xs   = removeDuplicates xs
+                | otherwise     = x : removeDuplicates xs

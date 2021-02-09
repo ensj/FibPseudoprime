@@ -25,10 +25,12 @@ fibFactorsCleaned n limit = do
     if n /= limit 
     then do
         let fibn = fib n
-
-        let primeFactors = pfactors(fibn)
+        ---ADD A removeDuplicate FUNCTION AND CALL IT HERE. WE NEED TO GET RID OF DUPLICATE FACTORS
+        let primeFactor = pfactors(fibn)
+        --DUPLICATES SHOULD IDEALLY BE DISCARDED HERE
         let ntoi = toInteger(n) -- n to Integer
         let pfFiltered = filter (\factor -> (factor `mod` ntoi == 1) || (factor `mod` ntoi == ntoi - 1)) primeFactors
+        --DISCARDING THEM HERE WORKS TOO
         -- print("Filtered factors: " ++ show pfFiltered)
 
         -- clean to ([+/- 1 mod 5], [+/- 2 mod 5])
