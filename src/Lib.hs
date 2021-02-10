@@ -1,14 +1,20 @@
 module Lib
-    ( fib,
+    ( 
+    classicFib, 
+    fib,
     factory
     ) where
-
 
 import Sort ( cleanList, subsets, splitByLength, cartesianProduct )
 import Data.List ( foldl' )
 import Math.NumberTheory.Factor ( pfactors )
 import Data.Bits ( Bits(testBit) )
 import Math.NumberTheory.Primes.Testing ( isFermatPP )
+
+fibs = 0 : 1 : zipWith (+) fibs (tail fibs)
+
+classicFib :: Int -> Integer 
+classicFib n = fibs!!n
 
 fib :: Int -> Integer
 fib n = snd . foldl_ fib_ (1, 0) . dropWhile not $

@@ -1,10 +1,10 @@
 name:                FibPseudoprime
 version:             0.1.0.0
-github:              "githubuser/FibPseudoprime"
+github:              "ensj/FibPseudoprime"
 license:             BSD3
-author:              "Author name here"
-maintainer:          "example@example.com"
-copyright:           "2021 Author name here"
+author:              "ensj, smashalkar"
+maintainer:          "ensjtrans@gmail.com"
+copyright:           "2021 ensjtrans"
 
 extra-source-files:
 - README.md
@@ -23,6 +23,8 @@ dependencies:
 - base >= 4.7 && < 5
 - HaskellForMaths
 - arithmoi
+- hspec
+- QuickCheck
 
 library:
   source-dirs: src
