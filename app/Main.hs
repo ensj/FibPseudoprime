@@ -2,20 +2,32 @@ module Main where
 
 import Lib
 import Criterion.Main
-
-main :: IO ()
-main = defaultMain [ 
-    bgroup "Carl Test Factory" [
-        bench "[1, 50)" $ (nf factory) [1, 2 .. 49]
-        , bench "[50, 100)" $ (nf factory) [100, 102 .. 149]
-        , bench "[100, 150)" $ (nf factory) [100, 101 .. 149]
-        , bench "[150, 200)" $ (nf factory) [151, 152 .. 199]
-        , bench "[200, 250)" $ (nf factory) [200, 201 .. 249]
-        , bench "[250, 300)" $ (nf factory) [250, 251 .. 299]
-        , bench "[300, 350)" $ (nf factory) [300, 301 .. 349]
-        , bench "[350, 400)" $ (nf factory) [350, 351 .. 399]
-        ]
-    ]
+import Math.NumberTheory.Factor ( pfactors )
 
 factory :: [Int] -> [(Integer, [Integer], [Integer])]
 factory targets = map carlTest targets 
+
+benchSuite :: [Int] -> [Benchmark]
+benchSuite list = [
+    bench "fib(n)" $ (nf (map fib)) list
+    , bench "pfactors(fibn)" $ (nf (map pfactors)) fibn
+    , bench "fibPsp(n, fibn, fibn_factors)" $ (nf (map fibPspNoFactors)) factors ]
+    where 
+        fibn = map fib list
+        factors = zip3 list fibn (map (\x -> pfactors(x)) fibn)
+
+benchSuiteSingle :: Int -> [Benchmark]
+benchSuiteSingle n = [
+    -- bench "fib(n)" $ (nf fib) n,
+    bench "pfactors(fibn)" $ (nf pfactors) fibn,
+    bench "fibPsp(n, fibn, fibn_factors)" $ (nf fibPspNoFactors) factors ]
+    where 
+        fibn = fib n
+        factors = (n, fibn, pfactors(fibn))
+
+main :: IO ()
+main = defaultMain $
+    map (\n -> bgroup ("SchaeferFibgen " ++ show n) $ benchSuiteSingle n) [200, 201 .. 250]
+    -- bgroup "SchaeferFibgen [1, 100)" $ benchSuite [1, 2 .. 99],
+    -- bgroup "SchaeferFibgen [100, 200)" $ benchSuite [100, 101 .. 199]
+    

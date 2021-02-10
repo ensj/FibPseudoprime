@@ -3,6 +3,7 @@ module Lib
     classicFib, 
     fib,
     fibPsp,
+    fibPspNoFactors,
     carlTest
     ) where
 
@@ -51,6 +52,27 @@ fibPsp n =
                         cartesianProduct(oddMultiple, oneModFiveSets), 
                         oddMultiple]
 
+-- generate fibpsp for the nth fib number
+fibPspNoFactors :: (Int, Integer, [Integer]) -> (Integer, [Integer])
+fibPspNoFactors (n, fibn, factors) = 
+    (fibn, psp) where
+        ntoi = toInteger(n)
+        -- calculates the prime factors of fib(n) that are +-1 mod n
+        pfFiltered = filter (\factor -> (factor `mod` ntoi == 1) || (factor `mod` ntoi == ntoi - 1)) factors
+        -- clean factors to ([+- 1 mod 5], [+- 2 mod 5])
+        cl = cleanList pfFiltered
+        -- get all multiples of [+- 1 mod 5] factors
+        oneModFiveSets = map product $ filter (\set -> set /= []) $ subsets $ fst cl
+        -- get all odd multiples of [+- 2 mod 5] factors
+        (singleton, oddMultiple) = splitByLength $ filter (\set -> set /= []) $ subsets $ snd cl
+        -- the concatenation of the cartesian product of oneModFive and singleton, 
+        -- the odd products by themselves, and the cartesian product of singleton and
+        -- the odd products form the list of fibonacci pseudoprimes.
+        psp = removeDuplicates $ 
+                concat [cartesianProduct(singleton, oneModFiveSets), 
+                        cartesianProduct(oddMultiple, oneModFiveSets), 
+                        oddMultiple]
+
 carlTest :: Int -> (Integer, [Integer], [Integer])
 carlTest n = 
     (fibn, fibpsp, btwopsp) where
@@ -59,6 +81,7 @@ carlTest n =
             if length fibpsp /= 0 
                 then [] 
                 else filter (\elem -> isFermatPP elem 2) fibpsp
+
     -- -- If a pseudoprime doesn't exist
     -- if length fibpsp /= 0 
     -- then do
