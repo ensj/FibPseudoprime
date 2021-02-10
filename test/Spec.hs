@@ -27,4 +27,5 @@ main = hspec $ do
             prop_fibEqualsfib
 
     describe "Sort" $ do
-        prop "Blach"
+        prop "Subsets returns the proper number of subsets" $
+            \l -> length $ subsets l `shouldBe` 2^(length l)
