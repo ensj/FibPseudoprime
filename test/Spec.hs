@@ -20,12 +20,17 @@ prop_fibEqualsfib =
     (\x ->
       fib x == classicFib x)
 
+prop_powersetLength :: [Integer] -> Bool
+prop_powersetLength l = 
+    (length $ subsets l) == 2^(length l)
+
 main :: IO ()
 main = hspec $ do
-    describe "Fibonacci" $ do
-        prop "Check that fib n correctly returns the nth fib number" $
-            prop_fibEqualsfib
-
-    describe "Sort" $ do
-        prop "Subsets returns the proper number of subsets" $
-            \l -> length $ subsets l `shouldBe` 2^(length l)
+    describe "Top" $ do 
+        describe "Research Functions Test Suite" $ do
+            prop "Check that fib n correctly returns the nth fib number" $
+                prop_fibEqualsfib
+        describe "Bottom" $ do
+            prop "Subsets returns the proper number of powersets" $ 
+                prop_powersetLength
+        

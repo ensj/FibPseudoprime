@@ -12,8 +12,8 @@ import Prelude
 --Cleans list--
 cleanList :: [Integer] -> ([Integer], [Integer])
 cleanList n = (a, b) where
-    a = filter (\n -> (n `mod` 5 == 2) || (n `mod` 5 == 3)) n
-    b = filter (\n -> (n `mod` 5 == 1) || (n `mod` 5 == 4)) n
+    a = filter (\n -> (n `mod` 5 == 1) || (n `mod` 5 == 4)) n
+    b = filter (\n -> (n `mod` 5 == 2) || (n `mod` 5 == 3)) n
 
 
 --Calculates all possible subsets--
@@ -30,6 +30,8 @@ splitByLength n = (a, b) where
 
 --Pass all the odd products to this function, along with (map product (even factor subsets))--
 cartesianProduct :: ([Integer], [Integer]) -> [Integer]
+cartesianProduct ([], b) = []
+cartesianProduct (a, []) = []
 cartesianProduct (a, b) = x where
     x = map product (sequence [a, b])
 
