@@ -25,6 +25,7 @@ dependencies:
 - arithmoi
 - hspec
 - QuickCheck
+- timeit
 
 library:
   source-dirs: src

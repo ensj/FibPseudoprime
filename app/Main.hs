@@ -1,17 +1,10 @@
 module Main where
 
 import Lib
+import System.TimeIt
 
-main :: IO Integer
-main = do
-    print("Input starting fib index (n)")
-    input <- getLine
-    let n = (read input :: Int)
+main :: IO ()
+main = print $ factory [1, 2 .. 100]
 
-    let fibFunc = factory n
-
-    print("Input ending fib index (n + m)")
-    input <- getLine
-    let m = (read input :: Int)
-
-    fibFunc(n + m)
+factory :: [Int] -> [(Integer, [Integer], [Integer])]
+factory targets = map (timeIt . carlTest) targets 

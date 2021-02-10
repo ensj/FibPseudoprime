@@ -2,7 +2,8 @@ module Lib
     ( 
     classicFib, 
     fib,
-    factory
+    fibPsp,
+    carlTest
     ) where
 
 import Sort ( cleanList, subsets, splitByLength, cartesianProduct, removeDuplicates )
@@ -50,32 +51,34 @@ fibPsp n =
                         cartesianProduct(oddMultiple, oneModFiveSets), 
                         oddMultiple]
 
-factory :: Int -> Int -> IO Integer
-factory n limit = do
-    if n /= limit 
-    then do
-        let (fibn, fibpsp) = fibPsp n
-        -- If a pseudoprime doesn't exist
-        if length fibpsp /= 0 
-        then do
-            -- then list the viable candidates.
-            print("Viable candidates generated from F_{" ++ show n ++ "} (" ++ show fibn ++ "): ")
-            print fibpsp
-            print("Length: " ++ show (length fibpsp))
+carlTest :: Int -> (Integer, [Integer], [Integer])
+carlTest n = 
+    (fibn, fibpsp, btwopsp) where
+        (fibn, fibpsp) = fibPsp n
+        btwopsp = 
+            if length fibpsp /= 0 
+                then [] 
+                else filter (\elem -> isFermatPP elem 2) fibpsp
+    -- -- If a pseudoprime doesn't exist
+    -- if length fibpsp /= 0 
+    -- then do
+    --     -- then list the viable candidates.
+    --     print(show (length fibpsp) ++ " viable candidates generated from F_{" ++ show n ++ "} (" ++ show fibn ++ "): ")
+    --     print fibpsp
 
-            -- perform the base-2 pseudoprime test.
-            let baseTwoFibpsp = filter (\elem -> isFermatPP elem 2) fibpsp
+    --     -- perform the base-2 pseudoprime test.
+    --     let baseTwoFibpsp = filter (\elem -> isFermatPP elem 2) fibpsp
 
-            -- if a base-2 pseudoprime exists
-            if length baseTwoFibpsp /= 0
-            then do
-                -- then state one (or more) has been found.
-                print "Base-2 Pseudoprime found!"
-                print(baseTwoFibpsp)
-                return (-1)
-            else factory (n + 1) limit
-        else do
-            -- else state there are no candidates for the base-2 pseudoprime test.
-            print("No candidates from F_{" ++ show n ++ "}.")
-            factory (n + 1) limit
-    else return (-1)
+    --     -- if a base-2 pseudoprime exists
+    --     if length baseTwoFibpsp /= 0
+    --     then do
+    --         -- then state one (or more) has been found.
+    --         print "Base-2 Pseudoprime found!"
+    --         print(baseTwoFibpsp)
+    --         return 1
+    --     else return 0
+    -- else do
+    --     print("No candidates from F_{" ++ show n ++ "}.")
+    --     return 0
+
+
