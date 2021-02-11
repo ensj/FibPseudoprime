@@ -11,6 +11,7 @@ import Sort ( cleanList, subsets, splitByLength, cartesianProduct, removeDuplica
 import Data.List ( foldl' )
 import Math.NumberTheory.Factor ( pfactors )
 import Data.Bits ( Bits(testBit) )
+import Math.NumberTheory.Primes (factorise, unPrime)
 import Math.NumberTheory.Primes.Testing ( isFermatPP )
 
 -- classic recursive implementation of the fibonacci numbers.
@@ -36,7 +37,7 @@ fibPsp n =
     (fibn, psp) where
         fibn = fib n
         -- get factors for nth fib number
-        primeFactors = pfactors(fibn)
+        primeFactors = map (\(a, b) -> unPrime a) $ factorise(fibn)
         ntoi = toInteger(n)
         -- calculates the prime factors of fib(n) that are +-1 mod n
         pfFiltered = filter (\factor -> (factor `mod` ntoi == 1) || (factor `mod` ntoi == ntoi - 1)) primeFactors
