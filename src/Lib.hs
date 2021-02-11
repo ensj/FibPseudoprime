@@ -13,11 +13,13 @@ import Math.NumberTheory.Factor ( pfactors )
 import Data.Bits ( Bits(testBit) )
 import Math.NumberTheory.Primes.Testing ( isFermatPP )
 
+-- classic recursive implementation of the fibonacci numbers.
 fibs = 0 : 1 : zipWith (+) fibs (tail fibs)
 
 classicFib :: Int -> Integer 
 classicFib n = fibs!!n
 
+-- fastest fib number calculator in the west. We kind of have no idea how this works.
 fib :: Int -> Integer
 fib n = snd . foldl_ fib_ (1, 0) . dropWhile not $
             [testBit n k | k <- let s = n in [s-1,s-2..0]]    
@@ -52,27 +54,21 @@ fibPsp n =
                         cartesianProduct(oddMultiple, oneModFiveSets), 
                         oddMultiple]
 
--- generate fibpsp for the nth fib number
+-- VERSION FOR BENCHMARK TESTING --
 fibPspNoFactors :: (Int, Integer, [Integer]) -> (Integer, [Integer])
 fibPspNoFactors (n, fibn, factors) = 
     (fibn, psp) where
         ntoi = toInteger(n)
-        -- calculates the prime factors of fib(n) that are +-1 mod n
         pfFiltered = filter (\factor -> (factor `mod` ntoi == 1) || (factor `mod` ntoi == ntoi - 1)) factors
-        -- clean factors to ([+- 1 mod 5], [+- 2 mod 5])
         cl = cleanList pfFiltered
-        -- get all multiples of [+- 1 mod 5] factors
         oneModFiveSets = map product $ filter (\set -> set /= []) $ subsets $ fst cl
-        -- get all odd multiples of [+- 2 mod 5] factors
         (singleton, oddMultiple) = splitByLength $ filter (\set -> set /= []) $ subsets $ snd cl
-        -- the concatenation of the cartesian product of oneModFive and singleton, 
-        -- the odd products by themselves, and the cartesian product of singleton and
-        -- the odd products form the list of fibonacci pseudoprimes.
         psp = removeDuplicates $ 
                 concat [cartesianProduct(singleton, oneModFiveSets), 
                         cartesianProduct(oddMultiple, oneModFiveSets), 
                         oddMultiple]
 
+-- Calculates the nth fib number, its fibpsp's, and the base-2 psp & fibpsp's. 
 carlTest :: Int -> (Integer, [Integer], [Integer])
 carlTest n = 
     (fibn, fibpsp, btwopsp) where
@@ -81,27 +77,5 @@ carlTest n =
             if length fibpsp /= 0 
                 then [] 
                 else filter (\elem -> isFermatPP elem 2) fibpsp
-
-    -- -- If a pseudoprime doesn't exist
-    -- if length fibpsp /= 0 
-    -- then do
-    --     -- then list the viable candidates.
-    --     print(show (length fibpsp) ++ " viable candidates generated from F_{" ++ show n ++ "} (" ++ show fibn ++ "): ")
-    --     print fibpsp
-
-    --     -- perform the base-2 pseudoprime test.
-    --     let baseTwoFibpsp = filter (\elem -> isFermatPP elem 2) fibpsp
-
-    --     -- if a base-2 pseudoprime exists
-    --     if length baseTwoFibpsp /= 0
-    --     then do
-    --         -- then state one (or more) has been found.
-    --         print "Base-2 Pseudoprime found!"
-    --         print(baseTwoFibpsp)
-    --         return 1
-    --     else return 0
-    -- else do
-    --     print("No candidates from F_{" ++ show n ++ "}.")
-    --     return 0
 
 

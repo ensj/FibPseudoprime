@@ -9,14 +9,14 @@ module Sort
 import Data.List ( filter, product )
 import Prelude
 
---Cleans list--
+--Cleans a set into a pair of ([+-1 mod 5], [+-2 mod 5]) sets--
 cleanList :: [Integer] -> ([Integer], [Integer])
 cleanList n = (a, b) where
     a = filter (\n -> (n `mod` 5 == 1) || (n `mod` 5 == 4)) n
     b = filter (\n -> (n `mod` 5 == 2) || (n `mod` 5 == 3)) n
 
 
---Calculates all possible subsets--
+--Takes a set and returns its powerset--
 subsets :: [Integer] -> [[Integer]]
 subsets []  = [[]]
 subsets (x:xs) = subsets xs ++ map (x:) (subsets xs)
@@ -35,6 +35,7 @@ cartesianProduct (a, []) = []
 cartesianProduct (a, b) = x where
     x = map product (sequence [a, b])
 
+--Removes duplicate elements from a list.
 removeDuplicates :: [Integer] -> [Integer]
 removeDuplicates [] = []
 removeDuplicates (x:xs)   | x `elem` xs   = removeDuplicates xs
