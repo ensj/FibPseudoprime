@@ -29,13 +29,14 @@ splitByLength n = (a, b) where
     b = map product (filter (\n -> (length n > 1) && (length n `mod` 2 == 1)) n)
 
 --Pass all the odd products to this function, along with (map product (even factor subsets))--
+--I don't know how to explain this one via text--
 cartesianProduct :: ([Integer], [Integer]) -> [Integer]
 cartesianProduct ([], b) = []
 cartesianProduct (a, []) = []
 cartesianProduct (a, b) = x where
     x = map product (sequence [a, b])
 
---Removes duplicate elements from a list.
+--Removes duplicate elements from a list.--
 removeDuplicates :: [Integer] -> [Integer]
 removeDuplicates [] = []
 removeDuplicates (x:xs)   | x `elem` xs   = removeDuplicates xs
