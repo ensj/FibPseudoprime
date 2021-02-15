@@ -13,4 +13,4 @@ printFibFactors (n, fibn, factors) = do
     print("Factors:  " ++ show factors ++ "  --  length: " ++ show (length factors))
 
 main :: IO ()
-main = Data.Text.IO.writeFile "output.txt" (pack $ show $ map carlTest [1, 2 .. 300])
+main = Data.Text.IO.writeFile "output/output.txt" (pack $ show $ map carlTest [1, 2 .. 300])
