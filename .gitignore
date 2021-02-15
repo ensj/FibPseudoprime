@@ -1,3 +1,5 @@
 .stack-work/
 *~
 *.html
+.DS_Store
+output/

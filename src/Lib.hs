@@ -15,6 +15,7 @@ import Math.NumberTheory.Primes (factorise, unPrime)
 import Math.NumberTheory.Primes.Testing ( isFermatPP )
 
 -- classic recursive implementation of the fibonacci numbers.
+fibs :: [Integer]
 fibs = 0 : 1 : zipWith (+) fibs (tail fibs)
 
 classicFib :: Int -> Integer 
@@ -35,21 +36,28 @@ fib n = snd . foldl_ fib_ (1, 0) . dropWhile not $
 fibPsp :: Int -> ([Integer], [Integer])
 fibPsp n = 
     (pfFiltered, psp) where
+        --Calculate n-th Fibonacci number
         fibn = fib n
-        -- get factors for nth fib number
+
+        --Get factors for n-th Fibonacci number
         primeFactors = map (\(a, b) -> unPrime a) $ factorise(fibn)
         ntoi = toInteger(n)
+
         -- calculates the prime factors of fib(n) that are +-1 mod n
-        pfFiltered = filter (\factor -> (factor `mod` ntoi == 1) || (factor `mod` ntoi == ntoi - 1)) primeFactors
+        pfFiltered = filter (\factor -> (factor `mod` ntoi == 1) || (factor `mod` ntoi == (ntoi - 1))) primeFactors
+
         -- clean factors to ([+- 1 mod 5], [+- 2 mod 5])
         cl = cleanList pfFiltered
+
         -- get all multiples of [+- 1 mod 5] factors
         oneModFiveSets = map product $ filter (\set -> set /= []) $ subsets $ fst cl
+
         -- get all odd multiples of [+- 2 mod 5] factors
         (singleton, oddMultiple) = splitByLength $ filter (\set -> set /= []) $ subsets $ snd cl
+
         -- the concatenation of the cartesian product of oneModFive and singleton, 
         -- the odd products by themselves, and the cartesian product of singleton and
-        -- the odd products form the list of fibonacci pseudoprimes.
+        -- the odd products themselves form the list of fibonacci pseudoprimes.
         psp = removeDuplicates $ 
                 concat [cartesianProduct(singleton, oneModFiveSets), 
                         cartesianProduct(oddMultiple, oneModFiveSets), 
