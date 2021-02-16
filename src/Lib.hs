@@ -33,10 +33,9 @@ fib n = snd . foldl_ fib_ (1, 0) . dropWhile not $
         foldl_ = foldl' -- '
 
 -- generate fibpsp for the nth fib number
-fibPsp :: Int -> (Integer, [Integer])
+fibPsp :: Int -> ([Integer], [Integer])
 fibPsp n = 
-    (fibn, psp) where
-
+    (pfFiltered, psp) where
         --Calculate n-th Fibonacci number
         fibn = fib n
 
@@ -65,9 +64,9 @@ fibPsp n =
                         oddMultiple]
 
 -- VERSION FOR BENCHMARK TESTING --
-fibPspNoFactors :: (Int, Integer, [Integer]) -> (Integer, [Integer])
+fibPspNoFactors :: (Int, Integer, [Integer]) -> ([Integer], [Integer])
 fibPspNoFactors (n, fibn, factors) = 
-    (fibn, psp) where
+    (pfFiltered, psp) where
         ntoi = toInteger(n)
         pfFiltered = filter (\factor -> (factor `mod` ntoi == 1) || (factor `mod` ntoi == ntoi - 1)) factors
         cl = cleanList pfFiltered
@@ -79,13 +78,10 @@ fibPspNoFactors (n, fibn, factors) =
                         oddMultiple]
 
 -- Calculates the nth fib number, its fibpsp's, and the base-2 psp & fibpsp's. 
-carlTest :: Int -> (Integer, [Integer], [Integer])
+carlTest :: Int -> (Int, [Integer], [(Integer, Int)])
 carlTest n = 
-    (fibn, fibpsp, btwopsp) where
-        (fibn, fibpsp) = fibPsp n
-        btwopsp = 
-            if length fibpsp /= 0 
-                then [] 
-                else filter (\elem -> isFermatPP elem 2) fibpsp
+    (n, factors, fibpspChecked) where
+        (factors, fibpsp) = fibPsp n
+        fibpspChecked = map (\psp -> (psp, fromEnum $ isFermatPP psp 2)) fibpsp
 
 

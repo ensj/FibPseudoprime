@@ -25,6 +25,7 @@ source-repository head
 
 library
   exposed-modules:
+      Benchmarking
       Lib
       Sort
   other-modules:
@@ -38,6 +39,7 @@ library
     , base >=4.7 && <5
     , criterion
     , hspec
+    , text
   default-language: Haskell2010
 
 executable FibPseudoprime-exe
@@ -55,6 +57,7 @@ executable FibPseudoprime-exe
     , base >=4.7 && <5
     , criterion
     , hspec
+    , text
   default-language: Haskell2010
 
 test-suite FibPseudoprime-test
@@ -73,4 +76,5 @@ test-suite FibPseudoprime-test
     , base >=4.7 && <5
     , criterion
     , hspec
+    , text
   default-language: Haskell2010

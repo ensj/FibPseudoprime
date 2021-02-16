@@ -26,6 +26,7 @@ dependencies:
 - hspec
 - QuickCheck
 - criterion
+- text
 
 library:
   source-dirs: src
