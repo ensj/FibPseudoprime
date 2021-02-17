@@ -16,7 +16,7 @@ hundred n = [n * 100 + 1, (n * 100) + 2 .. (n * 100) + 100]
 
 createOutput :: Int -> IO()
 createOutput n = do
-    T.IO.writeFile ("output/output" ++ show n ++ ".txt") 
+    T.IO.writeFile ("output/output_" ++ show (n * 100 + 1) ++ "-" ++ show (n * 100 + 100) ++ ".txt") 
         (T.map (\c -> if c == '(' then '[' else if c == ')' then ']' else c) $ 
             T.pack $
             show $ L.map carlTest $ hundred n)
