@@ -4,15 +4,15 @@ module Lib
     fib,
     fibPsp,
     fibPspNoFactors,
+    scndFermatPspTest,
     carlTest
     ) where
 
 import Sort ( cleanList, subsets, splitByLength, cartesianProduct, removeDuplicates )
 import Data.List ( foldl' )
-import Math.NumberTheory.Factor ( pfactors )
 import Data.Bits ( Bits(testBit) )
 import Math.NumberTheory.Primes (factorise, unPrime)
-import Math.NumberTheory.Primes.Testing ( isFermatPP )
+import Math.NumberTheory.Powers.Modular
 
 -- classic recursive implementation of the fibonacci numbers.
 fibs :: [Integer]
@@ -77,11 +77,15 @@ fibPspNoFactors (n, fibn, factors) =
                         cartesianProduct(oddMultiple, oneModFiveSets), 
                         oddMultiple]
 
+-- takes in power and modulus to return result of 2^power `mod` modulus
+scndFermatPspTest :: Integer -> Integer
+scndFermatPspTest m = powMod 2 (m-1) m
+
 -- Calculates the nth fib number, its fibpsp's, and the base-2 psp & fibpsp's. 
-carlTest :: Int -> (Int, [Integer], [(Integer, Int)])
+carlTest :: Int -> (Int, [Integer], [(Integer, Integer)])
 carlTest n = 
     (n, factors, fibpspChecked) where
         (factors, fibpsp) = fibPsp n
-        fibpspChecked = map (\psp -> (psp, fromEnum $ isFermatPP psp 2)) fibpsp
+        fibpspChecked = map (\psp -> (psp, scndFermatPspTest psp)) fibpsp
 
 

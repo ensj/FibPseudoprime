@@ -33,8 +33,7 @@ library
   hs-source-dirs:
       src
   build-depends:
-      HaskellForMaths
-    , QuickCheck
+      QuickCheck
     , arithmoi
     , base >=4.7 && <5
     , criterion
@@ -51,7 +50,6 @@ executable FibPseudoprime-exe
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       FibPseudoprime
-    , HaskellForMaths
     , QuickCheck
     , arithmoi
     , base >=4.7 && <5
@@ -70,7 +68,6 @@ test-suite FibPseudoprime-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       FibPseudoprime
-    , HaskellForMaths
     , QuickCheck
     , arithmoi
     , base >=4.7 && <5
