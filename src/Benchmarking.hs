@@ -1,18 +1,17 @@
 module Benchmarking 
-	(
-		benchFactorization,
-		benchMain
-	) where
+    (
+        benchFactorization,
+        benchMain
+    ) where
 
 import Criterion.Main
-import Math.NumberTheory.Factor ( pfactors )
 import Math.NumberTheory.Primes
 import Lib
 
 benchFactorization :: Int -> [Benchmark]
 benchFactorization n = [
     -- bench "fib(n)" $ (nf fib) n,
-    bench "pfactors(fibn)" $ (nf pfactors) fibn, 
+    --  bench "pfactors(fibn)" $ (nf pfactors) fibn, 
     bench "factorise(fibn)" $ (nf factorise) fibn ]
     -- bench "fibPsp(n, fibn, fibn_factors)" $ (nf fibPspNoFactors) factors ]
     where 
