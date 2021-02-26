@@ -26,6 +26,9 @@ dependencies:
 - QuickCheck
 - criterion
 - text
+- random
+- stm
+- deepseq
 
 library:
   source-dirs: src

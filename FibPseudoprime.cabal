@@ -28,6 +28,7 @@ library
       Benchmarking
       Lib
       Sort
+      TimeLimits
   other-modules:
       Paths_FibPseudoprime
   hs-source-dirs:
@@ -37,7 +38,10 @@ library
     , arithmoi
     , base >=4.7 && <5
     , criterion
+    , deepseq
     , hspec
+    , random
+    , stm
     , text
   default-language: Haskell2010
 
@@ -54,7 +58,10 @@ executable FibPseudoprime-exe
     , arithmoi
     , base >=4.7 && <5
     , criterion
+    , deepseq
     , hspec
+    , random
+    , stm
     , text
   default-language: Haskell2010
 
@@ -72,6 +79,9 @@ test-suite FibPseudoprime-test
     , arithmoi
     , base >=4.7 && <5
     , criterion
+    , deepseq
     , hspec
+    , random
+    , stm
     , text
   default-language: Haskell2010
