@@ -5,10 +5,12 @@ module Lib
     fibPsp,
     fibPspNoFactors,
     scndFermatPspTest,
-    carlTest
+    carlTest,
+    carlTestTermLimits
     ) where
 
 import Sort ( cleanList, subsets, splitByLength, cartesianProduct, removeDuplicates )
+import TimeLimits
 import Data.List ( foldl' )
 import Data.Bits ( Bits(testBit) )
 import Math.NumberTheory.Primes (factorise, unPrime)
@@ -63,6 +65,29 @@ fibPsp n =
                         cartesianProduct(oddMultiple, oneModFiveSets), 
                         oddMultiple]
 
+-- generate fibpsp for the nth fib number, but quit factorization in the middle if necessary
+fibPspTermLimits :: Int -> IO ([Integer], [Integer])
+fibPspTermLimits n = do
+        let fibn = fib n
+
+        primeFactors <- timeLimited (3600 * 1000000) fibn $ factorise(fibn) -- init to 1 hour limit
+        let pfactorsMapped = map (\(a, b) -> unPrime a) primeFactors
+        let ntoi = toInteger(n)
+
+        let pfFiltered = filter (\factor -> (factor `mod` ntoi == 1) || (factor `mod` ntoi == (ntoi - 1))) pfactorsMapped
+
+        let cl = cleanList pfFiltered
+
+        let oneModFiveSets = map product $ filter (\set -> set /= []) $ subsets $ fst cl
+
+        let (singleton, oddMultiple) = splitByLength $ filter (\set -> set /= []) $ subsets $ snd cl
+
+        let psp = removeDuplicates $ 
+                concat [cartesianProduct(singleton, oneModFiveSets), 
+                        cartesianProduct(oddMultiple, oneModFiveSets), 
+                        oddMultiple]
+        return (pfFiltered, psp)
+
 -- VERSION FOR BENCHMARK TESTING --
 fibPspNoFactors :: (Int, Integer, [Integer]) -> ([Integer], [Integer])
 fibPspNoFactors (n, fibn, factors) = 
@@ -87,5 +112,13 @@ carlTest n =
     (n, factors, fibpspChecked) where
         (factors, fibpsp) = fibPsp n
         fibpspChecked = map (\psp -> (psp, scndFermatPspTest psp)) fibpsp
+
+-- Calculates the nth fib number, its fibpsp's, and the base-2 psp & fibpsp's. 
+-- quits factorization in the middle if necessary.
+carlTestTermLimits :: Int -> IO (Int, [Integer], [(Integer, Integer)])
+carlTestTermLimits n = do
+    (factors, fibpsp) <- fibPspTermLimits n
+    let fibpspChecked = map (\psp -> (psp, scndFermatPspTest psp)) fibpsp
+    return (n, factors, fibpspChecked)
 
 
