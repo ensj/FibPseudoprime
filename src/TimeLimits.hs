@@ -14,13 +14,13 @@ type Time = Int
 --   list items and pushed them onto a `TVar [a]`.  When the requested time
 --   expires, ghc will terminate the execution of `forceIntoTVar`, and we'll
 --   return what has been pushed onto the tvar.
-timeLimited :: (NFData a) => Time -> Integer -> [a] -> IO [a]
+timeLimited :: (NFData a) => Time -> Int -> [a] -> IO [a]
 timeLimited t x xs = do
     v <- newTVarIO []
     results <- timeout t (forceIntoTVar xs v)
     case results of
         Just a -> return ()
-        Nothing -> print("Complete factorization failed at: " ++ show x)
+        Nothing -> print("Complete factorization failed at F_{" ++ show x ++ "}.")
     readTVarIO v 
 
 -- | Force computed values into given tvar

@@ -70,7 +70,7 @@ fibPspTermLimits :: Int -> IO ([Integer], [Integer])
 fibPspTermLimits n = do
         let fibn = fib n
 
-        primeFactors <- timeLimited (3600 * 1000000) fibn $ factorise(fibn) -- init to 1 hour limit
+        primeFactors <- timeLimited (30 * 60 * 1000000) n $ factorise(fibn) -- init to 1 hour limit
         let pfactorsMapped = map (\(a, b) -> unPrime a) primeFactors
         let ntoi = toInteger(n)
 
