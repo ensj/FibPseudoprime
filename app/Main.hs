@@ -34,4 +34,4 @@ createOutputTermLimits n = do
 
 
 main :: IO ()
-main = mapM_ (createOutputTermLimits) [0, 1 .. ]
+main = mapM_ (createOutputTermLimits) [5, 6 .. ]
